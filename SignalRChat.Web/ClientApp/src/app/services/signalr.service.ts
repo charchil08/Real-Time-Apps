@@ -40,6 +40,7 @@ export class SignalrService {
   public sendMessageToHub(message: string): any {
     let chatMessage : IChatMessage = this.buildChatMessage(message);
     debugger;
+    //invoke is for sending purpose from client to server
     return this.hubConnection?.invoke("BroadcastAsync", chatMessage)
       .then(() => {
         console.log("Sent message to hub");
