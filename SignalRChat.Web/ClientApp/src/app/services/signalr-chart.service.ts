@@ -25,7 +25,8 @@ export class SignalrChartService {
   public getChartDataFromApi() {
     this.http.get<IChartData[]>(this.apiUrl)
       .subscribe(res => {
-        this.data = [...res];
+        console.log("🚀 ~ file: signalr-chart.service.ts:28 ~ SignalrChartService ~ getChartDataFromApi ~ res:", res)
+        this.data = res;
       })      
   }
 
@@ -41,13 +42,13 @@ export class SignalrChartService {
     return new HubConnectionBuilder()
       .withUrl(this.connectionUrl)
       .withHubProtocol(new MessagePackHubProtocol())
-      .configureLogging(LogLevel.Trace)
+      .configureLogging(LogLevel.Error)
       .build();
   }
 
   private addListeners() {
     this.hubConnection?.on("TransferChartData", (res: IChartData[]) => {
-      this.data = [...res];
+      this.data = res;
       console.log("🚀 ~ file: signalr-chart.service.ts:35 ~ SignalrChartService ~ this.hubConnection?.on ~ res:", res)
     });
   }

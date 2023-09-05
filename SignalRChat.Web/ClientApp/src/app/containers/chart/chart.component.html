@@ -1,1 +1,8 @@
-<p>chart works!</p>
+<div style="display: block" *ngIf='chartSignalrService.data'>
+    <canvas baseChart
+            [datasets]="this.chartSignalrService.data"
+            [labels]="this.chartLabels"
+            [options]="this.chartOptions"
+            [legend]="chartLegend" >
+    </canvas>
+  </div>

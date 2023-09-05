@@ -8,7 +8,7 @@ import { SignalrChartService } from 'src/app/services/signalr-chart.service';
   styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
-  charOptions : ChartConfiguration['options'] = {
+  chartOptions : ChartConfiguration['options'] = {
     responsive : true,
     scales : {
       y: {
