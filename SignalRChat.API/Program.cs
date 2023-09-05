@@ -1,5 +1,6 @@
 
 using SignalRChat.API.Hubs.Infrastructure;
+using SignalRChat.API.Shared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR().AddMessagePackProtocol();
+
+builder.Services.AddSingleton<TimerManager>();
 
 builder.Services.AddCors(options =>
 {

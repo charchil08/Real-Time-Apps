@@ -4,5 +4,5 @@ using SignalRChat.API.Entities.Models;
 
 public interface IChartHub
 {
-    Task ChartDataReceivedFromHub(ChartDTO dto);
+    //Task ChartDataReceivedFromHub(ChartDTO dto);
 }

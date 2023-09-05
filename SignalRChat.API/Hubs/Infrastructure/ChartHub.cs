@@ -10,4 +10,4 @@ public class ChartHub : Hub<IChartHub>
     //{
     //    await Clients. ("ChartDataReceivedFromHub", dto);
     //}
-}
+}   
