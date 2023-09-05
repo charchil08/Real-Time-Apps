@@ -40,5 +40,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<ChatHub>("/signalr");
+app.MapHub<ChartHub>("/signalr/chart");
 
 app.Run();
