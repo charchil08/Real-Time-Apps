@@ -2,7 +2,7 @@
 
 public class ChatMessage
 {
-    public string Text { get; set; } = null!;
+    public string Message { get; set; } = null!;
     public string ConnectionId { get; set; } = null!;
     public DateTime DateTime { get; set; }
 }

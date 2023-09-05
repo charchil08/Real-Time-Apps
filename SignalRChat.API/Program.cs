@@ -12,20 +12,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR().AddMessagePackProtocol();
 
-builder.Services.AddCors(opt =>
+builder.Services.AddCors(options =>
 {
-    opt.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowAny", policy =>
     {
-        policy.WithOrigins("http://localhost/4200")
-        .AllowCredentials()
-        .AllowAnyHeader()
-        .SetIsOriginAllowed(_ => true)
-        .AllowAnyMethod();
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.WithOrigins("http://localhost:4200");
+        policy.AllowCredentials();
     });
 });
 
 var app = builder.Build();
 
+app.UseCors("AllowAny");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

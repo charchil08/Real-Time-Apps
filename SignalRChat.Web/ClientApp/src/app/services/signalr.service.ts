@@ -12,13 +12,17 @@ export class SignalrService {
 
   private apiUrl: string = "http://localhost:5255/api/chats";
   private connectionUrl: string = "http://localhost:5255/signalr";
-  private messages: IChatMessage[] = [];
+  public messages: IChatMessage[] = [];
   private hubConnection: HubConnection | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) { 
     this.startConnection();
-    this.addListeners();
   }
+
+  public connect = () => {
+    // this.startConnection();
+    this.addListeners();
+  };
 
   private getConnection(): HubConnection {
     return new HubConnectionBuilder()
@@ -33,8 +37,10 @@ export class SignalrService {
       .pipe(tap(_ => console.log(_, "message sent to api")));
   }
 
-  public sendMessageToHub (message: string) : any {
-    return this.hubConnection?.invoke("BroadcastAsync", this.buildChatMessage(message))
+  public sendMessageToHub(message: string): any {
+    let chatMessage : IChatMessage = this.buildChatMessage(message);
+    debugger;
+    return this.hubConnection?.invoke("BroadcastAsync", chatMessage)
       .then(() => {
         console.log("Sent message to hub");
       })
@@ -68,9 +74,9 @@ export class SignalrService {
 
   private buildChatMessage(mesage: string): IChatMessage {
     return {
-      connectionId: this.hubConnection?.connectionId ?? "",
-      text: mesage,
-      dateTime: new Date()
+      ConnectionId: this.hubConnection?.connectionId ?? "",
+      Message: mesage,
+      DateTime: new Date()
     };
   }
 
