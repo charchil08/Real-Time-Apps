@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { HttpClient, HttpEvent } from '@angular/common/http';
+import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { IChatMessage } from '../models/IChatMessage';
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { IChatMessage } from './../models/IChatMessage';
+import { from, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,21 @@ export class SignalrService {
       .build();
   }
 
+  public sendMessageToApi(message: string) {
+    this.http.post(this.apiUrl, this.buildChatMessage(message))
+      .pipe(tap(_ => console.log(_, "message sent to api")));
+  }
+
+  public sendMessageToHub (message: string) : any {
+    return this.hubConnection?.invoke("BroadcastAsync", this.buildChatMessage(message))
+      .then(() => {
+        console.log("Sent message to hub");
+      })
+      .catch((err) => {
+        console.log("🚀 ~ file: signalr.service.ts:42 ~ SignalrService ~ sendMessageToHub ~ err:", err)
+      });
+  }
+
   private startConnection() {
     this.hubConnection = this.getConnection();
 
@@ -35,7 +51,7 @@ export class SignalrService {
   }
 
   private addListeners() {
-    this.hubConnection?.on("MessageReceivedFromHub", (data : IChatMessage) => {
+    this.hubConnection?.on("MessageReceivedFromHub", (data: IChatMessage) => {
       console.log(data, "new chat message");
       this.messages.push(data);
     });
@@ -44,17 +60,17 @@ export class SignalrService {
       console.log("new user connected...");
     })
 
-    this.hubConnection?.on("messageReceivedFromApi", (data:IChatMessage) => {
+    this.hubConnection?.on("messageReceivedFromApi", (data: IChatMessage) => {
       console.log(data, "new chat message from api");
       this.messages.push(data);
     });
   }
 
-  private buildChatMessage(mesage:string) : IChatMessage {
+  private buildChatMessage(mesage: string): IChatMessage {
     return {
-      connectionId : this.hubConnection?.connectionId ?? "",
-      text : mesage,
-      dateTime : new Date()
+      connectionId: this.hubConnection?.connectionId ?? "",
+      text: mesage,
+      dateTime: new Date()
     };
   }
 
